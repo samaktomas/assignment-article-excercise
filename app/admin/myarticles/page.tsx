@@ -16,6 +16,8 @@ import {
   where,
   orderBy,
   onSnapshot,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import { db } from "@/firebase";
@@ -33,6 +35,11 @@ export default function MyArticles() {
       .join("&");
     const url = `/admin/articleform?${queryString}`;
     router.push(url);
+  };
+
+  const handelDelete = async (id: string) => {
+    await deleteDoc(doc(db, "articles", id));
+    alert("Article has been deleted");
   };
 
   useEffect(() => {
@@ -135,7 +142,10 @@ export default function MyArticles() {
                           onClick={() => handleEdit(article)}
                           className="h-6 cursor-pointer hover:opacity-60 hover:text-blue-500"
                         />
-                        <TrashIcon className="h-6 cursor-pointer hover:opacity-60 hover:text-red-500" />
+                        <TrashIcon
+                          onClick={() => handelDelete(article._id)}
+                          className="h-6 cursor-pointer hover:opacity-60 hover:text-red-500"
+                        />
                       </div>
                     </TableCell>
                   </TableRow>
