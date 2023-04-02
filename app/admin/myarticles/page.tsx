@@ -22,6 +22,7 @@ import {
 import { useSession } from "next-auth/react";
 import { db } from "@/firebase";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 export default function MyArticles() {
   const { data: session } = useSession();
@@ -38,8 +39,12 @@ export default function MyArticles() {
   };
 
   const handelDelete = async (id: string) => {
-    await deleteDoc(doc(db, "articles", id));
-    alert("Article has been deleted");
+    const notification = toast.loading("Article is deleting...");
+    await deleteDoc(doc(db, "articles", id)).then(() =>
+      toast.success("Article deleted", {
+        id: notification,
+      })
+    );
   };
 
   useEffect(() => {

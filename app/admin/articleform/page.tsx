@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { db, storage } from "@/firebase";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { toast } from "react-hot-toast";
 
 type FormData = {
   title: string;
@@ -53,6 +54,7 @@ export default function ArticleForm({ searchParams }: Props) {
   const publishArticle = async (data: FormData) => {
     if (isSubmitting) return;
     let articleId = article._id;
+    const notification = toast.loading("Publishing the article...");
     try {
       if (!articleId) {
         const newArticleRef = doc(collection(db, "articles"));
@@ -75,7 +77,11 @@ export default function ArticleForm({ searchParams }: Props) {
         });
     } catch (e) {
       console.error(e);
+      toast.error("Uuups, somethig got wrong...");
     }
+    toast.success("Article published!", {
+      id: notification,
+    });
     router.push("/admin/myarticles");
   };
 

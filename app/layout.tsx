@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import "./globals.css";
 import { Provider } from "./provider";
 import { getServerSession } from "next-auth/next";
+import ClientProvider from "@/components/ClientProvider";
 
 export const metadata = {
   title: "Create Next App",
@@ -20,6 +21,7 @@ export default async function RootLayout({
       <body className="">
         <Provider session={session}>
           <Header />
+          <ClientProvider />
           {children}
         </Provider>
       </body>
